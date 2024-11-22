@@ -1,0 +1,45 @@
+name: Security Scan with TFscan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  tfscan:
+    name: Run TFscan
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python (if TFscan requires it)
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      # Step 3: Install TFscan
+      - name: Install TFscan
+        run: |
+          pip install tfscan
+
+      # Step 4: Run TFscan
+      - name: Run TFscan
+        run: |
+          tfscan scan .
+
+      # Step 5: Upload scan results (optional)
+      - name: Save TFscan Report
+        if: success() || failure()
+        run: |
+          mkdir -p reports
+          tfscan scan . --output-file reports/tfscan-report.json
+        artifacts:
+          name: tfscan-report
+          path: reports
