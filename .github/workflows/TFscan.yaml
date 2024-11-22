@@ -29,17 +29,15 @@ jobs:
         run: |
           pip install tfscan
 
-      # Step 4: Run TFscan
+      # Step 4: Run TFscan and save the report
       - name: Run TFscan
-        run: |
-          tfscan scan .
-
-      # Step 5: Upload scan results (optional)
-      - name: Save TFscan Report
-        if: success() || failure()
         run: |
           mkdir -p reports
           tfscan scan . --output-file reports/tfscan-report.json
-        artifacts:
+
+      # Step 5: Upload the report as an artifact
+      - name: Upload TFscan Report
+        uses: actions/upload-artifact@v3
+        with:
           name: tfscan-report
-          path: reports
+          path: reports/tfscan-report.json
