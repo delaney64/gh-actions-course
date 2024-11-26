@@ -7,9 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout
+        uses: actions/checkout@v4
       - name: Printing Folders
         run: ls
+
+
+
     #0 check out code
     #1intall app depeendcies for reaction
     #2 execute automated tests
